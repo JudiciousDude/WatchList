@@ -1,8 +1,8 @@
 <?php
 
 return array(
-    //'path' => 'controllerName/controllerMethod'
+    //'path' => 'controllerName/controllerMethod[/params]'
     'login' => 'login/log',
-    '[a-z,_]+\/list' => 'profile/list',
-    '([a-z,_]+)' => 'profile/show',
+    'profile' => 'profile/user',
+    '([a-z,A-Z,0-9,_]+)' => 'profile/showUser/$1',
 );

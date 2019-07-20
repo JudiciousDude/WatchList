@@ -19,12 +19,13 @@ class Router{
     public function run(){
 
         $url = $this->getURL();
-        //redo
-        foreach($this->routes as $path => $controller){
-            if(preg_match("~$path~", $url)){
+        
+        foreach($this->routes as $rule => $path){
+            if(preg_match("~$rule~", $url)){
 
-                $parts = explode('/', $controller);
-
+                $internalRoute = preg_replace("~$rule~", $path, $url);
+                $parts = explode('/', $internalRoute);
+                
                 $controllerName = ucfirst(array_shift($parts)).'Controller'; 
                 $controllerMethod = array_shift($parts);    
                 
@@ -35,7 +36,7 @@ class Router{
                 }
 
                 $controllerObj = new $controllerName;
-                $result = $controllerObj->$controllerMethod();
+                $result = call_user_func_array(array($controllerObj, $controllerMethod), $parts);
                 if($result != null) break;
             }
         }
