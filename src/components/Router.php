@@ -1,4 +1,5 @@
 <?php
+
 class Router{
 
     private $routes;
@@ -17,7 +18,6 @@ class Router{
     }
 
     public function run(){
-
         $url = $this->getURL();
         
         foreach($this->routes as $rule => $path){
