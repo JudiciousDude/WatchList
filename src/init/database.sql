@@ -24,10 +24,10 @@ CREATE TABLE `userprofile` (
 );
 CREATE TABLE `userlists` (
 	`UserName` VARCHAR(50) NOT NULL,
-	`Watched` MEDIUMTEXT NULL,
-	`Favourite` MEDIUMTEXT NULL,
-	`Planned` MEDIUMTEXT NULL,
-	`Watching` MEDIUMTEXT NULL,
+	`Watched` MEDIUMTEXT NOT NULL,
+	`Favourite` MEDIUMTEXT NOT NULL,
+	`Planned` MEDIUMTEXT NOT NULL,
+	`Watching` MEDIUMTEXT NOT NULL,
 	PRIMARY KEY (`UserName`),
 	CONSTRAINT `userlist` FOREIGN KEY (`UserName`) REFERENCES `username` (`UserName`) ON DELETE CASCADE
 );

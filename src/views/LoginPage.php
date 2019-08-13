@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Login on Watched</title>
+	<title>WatchList&bull;Login</title>
 </head>
 <body>
 	<form method="post">
-		<label for="login"><input type="text" name="login"></label>
-		<label for="password"><input type="text" name="password"></label>
+		<label for="username">Username</label><input type="text" name="username"><br>
+		<label for="password">Password</label><input type="text" name="password"><br>
 		<input type="submit" title="Login">
 	</form>
 </body>

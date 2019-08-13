@@ -20,37 +20,25 @@ class Profile{
     }
 
     /*
-        Returns users hash info.
+        Get username by given hash.
+        
+        Requests Redis for its value. If not set - gets it from database and sets in Redis with expire time = 15 mins.
+        Returns null if there no such user in db.
     */
     public static function getNameByHash($userHash){
+        global $redis;
+        $redis->select(0);
+        $username = $redis->get($userHash);
+        if(strlen($username) >= 3) return $username;
+
         $db = Db::getConnection();
+        $result = $db->query("SELECT UserName FROM username WHERE UserHash='$userHash'");        
+        if($result->rowCount() == 0) return null;
 
-        $result = $db->preparedQuery("SELECT UserName FROM username WHERE UserHash=?", $userHash);
-        if($result == false){return null;}
+        $username = $result->fetch()['UserName'];
 
-        return $result['UserHash'];
-    }
+        $redis->set($userHash, $username, 900);
 
-    /*
-        Creates new user in database.
-        Returns hash of new user or false if user exists.
-    */
-    public static function createUser($userName, $password){
-        $db = DB::getConnection();
-
-        $passHash = password_hash($password, PASSWORD_BCRYPT);
-        $userHash = hash('md5', $userName);
-
-        //should be error logging here and transaction
-        $result = $db->preparedQuery('INSERT INTO username VALUES (?, ?)', $userName, $userHash);
-        if(!$result)return false;
-        $result = $db->query("INSERT INTO password(UserHash, PasswordHash) VALUES ('$userHash', '$passHash')");
-        if(!$result)return false;
-        $result = $db->query("INSERT INTO userprofile(UserName) VALUES ('$userName')");
-        if(!$result)return false;
-        $result = $db->query("INSERT INTO userlists(UserName) VALUES ('$userName')");
-        if(!$result)return false;
-
-        return $userHash;
+        return $username;
     }
 }

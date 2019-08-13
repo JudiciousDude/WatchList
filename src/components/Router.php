@@ -25,15 +25,13 @@ class Router{
 
                 $internalRoute = preg_replace("~$rule~", $path, $url);
                 $parts = explode('/', $internalRoute);
-                
+
                 $controllerName = ucfirst(array_shift($parts)).'Controller'; 
                 $controllerMethod = array_shift($parts);    
                 
                 $controllerFile = ROOT.'/src/controllers/'.$controllerName.'.php';
 
-                if(file_exists($controllerFile)){
-                    include_once($controllerFile);
-                }
+                if(file_exists($controllerFile)) include_once($controllerFile);
 
                 $controllerObj = new $controllerName;
                 $result = call_user_func_array(array($controllerObj, $controllerMethod), $parts);
